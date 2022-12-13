@@ -1,19 +1,31 @@
+import { ImdbService } from 'src/app/services/imdb.service'; 
 import { Component, Input, OnInit } from '@angular/core';
+
+import { CarouselAnimation, fadeIn, fadeOut } from './carousel.animations';
 import { transition, trigger, useAnimation } from '@angular/animations';
-import { ImdbService } from 'src/app/services/imdb.service';
 
 @Component({
   selector: 'app-carousel',
   templateUrl: './carousel.component.html',
   styleUrls: ['./carousel.component.css'],
+  animations: [
+    trigger('slideAnimation', [
+      transition('void => fade', [
+        useAnimation(fadeIn, { params: { time: '1s' } }),
+      ]),
+      transition('fade => void', [
+        useAnimation(fadeOut, { params: { time: '1s' } }),
+      ]),
+    ]),
+  ],
 })
 export class CarouselComponent implements OnInit {
-  // @Input() animationType = CarouselAnimation.Fade;
+  @Input() animationType = CarouselAnimation.Fade;
 
   public movies: any = [];
   currentMovie = 0;
 
-  constructor(private imdb: ImdbService) {}
+  constructor(private imdb: ImdbService) { }
 
   ngOnInit(): void {
     this.getMovies();
